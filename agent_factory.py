@@ -22,6 +22,31 @@ def load_JecAgents_from_json(file_path):
         agents[data['name']] = agent
     
 
+def load_AuvAgents_from_json(file_path):
+    with open(file_path, 'r', encoding='utf-8') as f:
+        agents_data = json.load(f)
+    
+    
+    env_names = set()
+    
+    for data in agents_data:
+        env_name = data['初始位置']
+        if env_name not in env_names:
+            envs.add_env(env_name, '')
+            env_names.add(env_name)
+        
+        agent = Agent(
+            name = data['name'],
+            persona = data['persona'],
+            envName = env_name
+        )
+        if 'memory' in data:
+            agent.memory = data['memory']
+        if 'addressBook' in data:
+            agent.addressBook = set(data['addressBook'])
+        agents[data['name']] = agent
+    
+
 def group_agents_by_environment():
     env_agents = {}
     for agent in agents.values():
@@ -41,7 +66,8 @@ def update_envs_with_agents_info():
 
 
 if __name__ == "__main__":
-    load_JecAgents_from_json('JecAgents.json')
+    # load_JecAgents_from_json('JecAgents.json')
+    load_AuvAgents_from_json('AuvAgents.json')
     update_envs_with_agents_info()
     while True:
         run_step()
