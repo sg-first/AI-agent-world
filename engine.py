@@ -42,7 +42,7 @@ class Agent:
         if not env_match:
             env_match = re.search(r'我要前往(.+?)。', action)
         if env_match:
-            self.envName = env_match.group(1)
+            self.update_envName(env_match.group(1))
 
     def filter_thinking(self, action):
         action = re.sub(r'思考【.*?】', '', action)
@@ -50,7 +50,8 @@ class Agent:
         return action.strip()
 
     def update_envName(self, newEnvName):
-        self.envName = newEnvName
+        if newEnvName in envs.get_all_envNameList():
+            self.envName = newEnvName
 
 
 class Environment:
@@ -59,11 +60,14 @@ class Environment:
 
     def add_env(self, envName, envInfo):
         if envInfo == None or envInfo == '':
-            envInfo = '这里没有任何人'
+            envInfo = '这里没有人'
         self.env[envName] = envInfo
 
     def get_env(self, envName):
         return self.env.get(envName, None)
+
+    def get_all_envNameList(self):
+        return list(self.env.keys())
 
     def get_all_envNameStr(self):
         return ','.join(self.env.keys())
@@ -81,8 +85,8 @@ class Environment:
             {"role": "user", "content": full_context}
         ]
         response = call_model(messages)
-        self.env[envName] = getContent(response)
-        return self.env[envName]
+        self.update_envInfo_by_str(envName, getContent(response))
+        return self.get_env(envName)
 
 envs = Environment()
 
