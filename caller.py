@@ -2,7 +2,7 @@ import requests
 
 API_KEY = 'sk-d2Z3OKasaE2bNbH7U2kCadmpGrdOJOI095dBgRGtoYPHivzq'
 
-def call_model(messages, model="hunyuan-2.0-instruct-20251111", temperature=0.7, stream=False):
+def call_model(messages, model="minimax-m2.5", temperature=0.7, stream=False):
     url = "https://tokenhub.tencentmaas.com/v1/chat/completions"
     headers = {
         "Authorization": f"Bearer {API_KEY}",

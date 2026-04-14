@@ -75,11 +75,11 @@ class Environment:
     def update_envInfo_by_str(self, envName, newEnvInfo):
         self.env[envName] = newEnvInfo
 
-    def update_envInfo_by_AI(self, envName, agentObj, agentActionStr):
+    def update_envInfo_by_AI(self, agentName, envName, agentObj, agentActionStr):
         warning = '注意！！1.如果角色离开了该场景，他的信息不需要在该场景中体现。2.不要把角色的心理活动更新到场景状态！！！角色说的话要完整更新到场景状态！但不要自行捏造角色没有说过的话！！'
         system_prompt = f'现在有一个场景{envName}，你需要根据场景中先前的状态和新发生的事，更新场景的状态。{warning}'
         envInfo = self.get_env(envName)
-        full_context = f'场景中先前的状态是：{envInfo}。{agentObj.name}刚刚{agentActionStr}。你直接输出场景的新状态，{warning}'
+        full_context = f'场景中先前的状态是：{envInfo}。{agentObj.name}刚刚{agentName}做了{agentActionStr}。你直接输出场景的新状态，{warning}'
         messages = [
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": full_context}
@@ -151,12 +151,12 @@ def run_step():
             print('【发送消息成功】')
 
         print(old_envName, '：')
-        envInfo = envs.update_envInfo_by_AI(old_envName, agent, filtered_action)
+        envInfo = envs.update_envInfo_by_AI(agent.name, old_envName, agent, filtered_action)
         print(envInfo)
 
         if new_envName != old_envName:
             print(new_envName, '：')
-            newEnvInfo = envs.update_envInfo_by_AI(new_envName, agent, filtered_action)
+            newEnvInfo = envs.update_envInfo_by_AI(agent.name, new_envName, agent, filtered_action)
             print(newEnvInfo)
 
         print('------------------------------')

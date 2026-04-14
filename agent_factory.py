@@ -67,7 +67,7 @@ def update_envs_with_agents_info():
 
 if __name__ == "__main__":
     # load_JecAgents_from_json('JecAgents.json')
-    load_AuvAgents_from_json('AuvAgents.json')
+    load_AuvAgents_from_json('japanAgents.json')
     update_envs_with_agents_info()
     while True:
         run_step()
